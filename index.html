@@ -11,14 +11,14 @@
 
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="favicon-96x96.png">
-    <link rel="apple-touch-icon" href="apple-touch-icon.png">
 
     <style>
-        /* --- Pro版と共通のスタイル --- */
+        /* --- アプリ版と共通のスタイル --- */
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; padding: 8px; background-color: #f0f2f5; margin: 0; box-sizing: border-box; font-size: 16px; color: #000; }
         * { box-sizing: border-box; }
         .app-grid { display: flex; gap: 12px; max-width: 1400px; margin: 0 auto; }
         .calculator-container { flex: 3; min-width: 0; background-color: #fff; padding: 12px; border-radius: 10px; box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1); width: 100%; }
+        
         .row { display: flex; margin-bottom: 12px; padding: 12px; border: 1px solid #ccc; border-radius: 10px; background-color: #fff; gap: 8px; }
         @media screen and (min-width: 801px) {
             .row { flex-direction: row; align-items: center; justify-content: space-between; }
@@ -34,11 +34,13 @@
             .result-area { width: 100% !important; justify-content: space-between !important; background: #eefbff; padding: 12px; border-radius: 8px; }
             .result-text { font-size: 2.2em; }
         }
+        
         .text-label-input { padding: 8px; border: 2px solid #000; border-radius: 6px; font-weight: bold; color: #000; outline: none; }
         .calc-area { display: flex; align-items: center; gap: 8px; }
         .multiplier-input { width: 110px; font-size: 1.5em; padding: 8px; text-align: right; border: 3px solid #007bff; border-radius: 6px; font-weight: bold; color: #000; outline: none; }
         .multiplier-input::placeholder, .master-input::placeholder { color: #ccc; font-weight: normal; }
         .result-text { font-weight: bold; color: #007bff; }
+        
         .operator-group { display: flex; flex-direction: column; align-items: center; width: 32px; }
         .operator-control { font-size: 0.7em; background: #333; color: #fff; width: 100%; height: 20px; display: flex; justify-content: center; align-items: center; border-radius: 3px; cursor: pointer; }
         .operator-display { font-size: 1.6em; font-weight: bold; text-align: center; color: #000; height: 35px; line-height: 35px; width: 100%; }
@@ -46,6 +48,7 @@
         .percent-toggle.active { background: #dc3545; color: #fff; border-color: #dc3545; }
         .base-toggle.chain { background: #007bff; color: #fff; border-color: #007bff; }
         .action-btn { border: none; background: none; cursor: pointer; font-size: 1.8em; opacity: 0.7; padding: 5px; }
+        
         .master-row { padding: 12px; margin-bottom: 12px; border: 3px solid #dc3545; border-radius: 10px; background-color: #fff; display: flex; align-items: center; justify-content: space-between; }
         .master-input { width: 45%; padding: 8px; border: 2px solid #dc3545; border-radius: 6px; font-size: 1.5em; text-align: right; font-weight: bold; color: #000; outline: none; }
         
@@ -53,7 +56,6 @@
         .storage-controls { display: flex; align-items: center; gap: 10px; }
         .save-btn-main { background: #e67e22; color: white; border: none; padding: 8px 15px; border-radius: 6px; font-weight: bold; cursor: pointer; white-space: nowrap; }
         .edit-toggle-btn { background: #6c757d; color: white; border: none; padding: 8px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 0.8em; }
-        
         .save-list-container { display: flex; gap: 6px; overflow-x: auto; padding: 4px 0; min-height: 45px; align-items: center; color: #666; font-size: 0.8em; }
         
         .side-calc { flex: 1; min-width: 280px; background: #333; padding: 12px; border-radius: 10px; color: white; height: fit-content; position: sticky; top: 8px; }
@@ -67,10 +69,12 @@
             .side-calc { display: none; position: fixed; bottom: 80px; right: 15px; z-index: 1000; width: 280px; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
             .side-calc.active { display: block; }
         }
+        
         .mode-toggle { display: flex; gap: 8px; margin-bottom: 12px; }
         .mode-button { flex: 1; padding: 12px 8px; border: none; background: #ddd; border-radius: 8px; cursor: pointer; font-weight: bold; display: flex; flex-direction: column; align-items: center; min-height: 85px; color: #000; transition: 0.2s; }
         .mode-button.active { background-color: #007bff; color: white; }
         .mode-desc { font-size: 0.7em; margin-top: 6px; opacity: 0.9; font-weight: normal; line-height: 1.3; text-align: center; }
+        
         .util-btn { border: none; background: #6c757d; color: white; padding: 8px 10px; border-radius: 6px; cursor: pointer; font-size: 0.85em; font-weight: bold; }
         #saveMessage { position: fixed; top: 15px; left: 50%; transform: translateX(-50%); background: #000; color: #fff; padding: 12px 25px; border-radius: 25px; opacity: 0; transition: opacity 0.3s; z-index: 2000; pointer-events: none; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
         .calc-toggle-btn { display: none; position: fixed; bottom: 15px; right: 15px; width: 60px; height: 60px; border-radius: 50%; background: #333; color: white; border: none; font-size: 28px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 1001; cursor: pointer; }
@@ -78,59 +82,22 @@
         .mobile-calc-close { display: none; background: none; border: none; color: white; font-size: 1.5em; cursor: pointer; }
         @media screen and (max-width: 900px) { .mobile-calc-close { display: block; } }
 
-        /* --- Pro版誘導モーダル --- */
-        .pro-modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            z-index: 3000;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
+        /* --- モーダル (機能制限用) --- */
+        .pro-modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); z-index: 3000; justify-content: center; align-items: center; padding: 20px; }
         .pro-modal-overlay.active { display: flex; }
-        .pro-modal-content {
-            background: #fff;
-            padding: 25px;
-            border-radius: 15px;
-            text-align: center;
-            max-width: 350px;
-            width: 100%;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-            animation: popIn 0.3s ease;
-            position: relative;
-        }
-        @keyframes popIn {
-            from { transform: scale(0.8); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
+        .pro-modal-content { background: #fff; padding: 25px; border-radius: 15px; text-align: center; max-width: 350px; width: 100%; box-shadow: 0 5px 20px rgba(0,0,0,0.3); animation: popIn 0.3s ease; position: relative; }
+        @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         .pro-icon { font-size: 3em; margin-bottom: 10px; }
         .pro-title { font-size: 1.4em; font-weight: bold; margin-bottom: 10px; color: #333; }
-        .pro-desc { color: #666; margin-bottom: 20px; line-height: 1.5; }
-        .pro-btn-buy {
-            display: block;
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            font-weight: bold;
-            text-decoration: none;
-            border-radius: 25px;
-            margin-bottom: 10px;
-            box-shadow: 0 4px 10px rgba(118, 75, 162, 0.4);
-            border: none;
-            cursor: pointer;
-            font-size: 1.1em;
-        }
-        .pro-btn-close {
-            background: none;
-            border: none;
-            color: #999;
-            cursor: pointer;
-            text-decoration: underline;
-            font-size: 0.9em;
-        }
+        .pro-desc { color: #666; margin-bottom: 20px; line-height: 1.5; word-break: break-word; }
+        
+        /* ボタン共通スタイル */
+        .pro-btn-buy { display: block; width: 100%; padding: 12px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; font-weight: bold; text-decoration: none; border-radius: 25px; margin-bottom: 10px; box-shadow: 0 4px 10px rgba(118, 75, 162, 0.4); border: none; cursor: pointer; font-size: 1.1em; }
+        .pro-btn-close { background: none; border: none; color: #999; cursor: pointer; text-decoration: underline; font-size: 0.9em; }
+
+        /* ロケットボタン: 黒グラデ (PRO誘導) */
+        .title-pro-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; background: linear-gradient(135deg, #1a237e 0%, #000 100%); color: white; text-decoration: none; padding: 8px 20px; border-radius: 20px; font-weight: bold; font-size: 0.9em; box-shadow: 0 3px 6px rgba(0,0,0,0.15); margin: 0 auto 15px auto; transition: transform 0.2s; }
+        .title-pro-btn:active { transform: scale(0.98); }
     </style>
 </head>
 <body onload="init()">
@@ -142,8 +109,8 @@
             <div class="pro-icon">💎</div>
             <div id="modalTitle" class="pro-title">Pro Feature</div>
             <div id="modalDesc" class="pro-desc">Save, Export are available in the Pro version.</div>
-            <a href="https://thejetdev.github.io/simple-sheet-Pro-v4/" target="_blank" class="pro-btn-buy" id="modalBtn">Upgrade Now</a>
-            <button class="pro-btn-close" onclick="closeProModal()">Close</button>
+            <a href="https://play.google.com/store/apps/details?id=com.jetdev.simplesheetpro" target="_blank" class="pro-btn-buy" id="modalBtn">Upgrade Now</a>
+            <button class="pro-btn-close" id="btnClosePro" onclick="closeProModal()">Close</button>
         </div>
     </div>
     
@@ -152,11 +119,14 @@
     <div class="app-grid">
         <div class="calculator-container">
             <div class="top-controls" style="display:flex; justify-content: space-between; align-items: center; margin-bottom:10px; flex-wrap: wrap; gap:8px;">
-                <div style="flex:1; display:flex; align-items:center; border:2px solid #000; border-radius:6px; padding:6px 10px; min-width:180px; background:#fff;">
+                <div style="flex:1; display:flex; align-items:center; border:2px solid #000; border-radius:6px; padding:6px 10px; min-width:140px; background:#fff;">
                     <span id="labelNameSpan" style="font-size:0.8em; color:#000; font-weight:bold; margin-right:8px;">Name:</span>
                     <input type="text" id="masterLabel" style="border:none; outline:none; font-weight:bold; width:100%; color:#000;" oninput="saveSettings()">
                 </div>
-                <div id="langContainer" style="display:flex; gap:3px; flex-wrap: wrap;"></div>
+
+                <div style="display:flex; gap:5px; align-items:center;">
+                    <div id="langContainer" style="display:flex; gap:3px; flex-wrap: wrap;"></div>
+                </div>
             </div>
 
             <div class="storage-bar">
@@ -168,9 +138,9 @@
             </div>
 
             <h2 id="title" style="font-weight: bold; margin-bottom: 5px; text-align:center;">Simple Sheet FREE</h2>
-            
-            <div style="text-align: center; margin-bottom: 15px;">
-                <a href="https://thejetdev.github.io/simple-sheet-Pro-v4/" target="_blank" style="display: inline-block; text-decoration: none; background: linear-gradient(135deg, #1a237e 0%, #000 100%); color: #fff; padding: 8px 16px; border-radius: 25px; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-size: 0.85em;">
+
+            <div style="text-align: center;">
+                <a href="https://play.google.com/store/apps/details?id=com.jetdev.simplesheetpro" target="_blank" class="title-pro-btn" id="btnLinkPro">
                     🚀 Go to Pro Version
                 </a>
             </div>
@@ -252,32 +222,40 @@
     </div>
 
     <script>
-        // --- 言語定義 ---
+        // --- 言語定義 (Web版用) ---
         const languageMap = {
             en: { title: "Simple Sheet FREE", modeBase: "From Base", descBase: "Fixed: All rows refer to the top base value", modePrev: "Flow", descPrev: "Sequential calc. Choose 🏠 or 🔗 for each row.", masterLabelName: "Name:", masterLabelStart: "Base Value", rowLabel: "Label", copyMsg: "Copied!", btnClear: "Clear", btnExport: "Exp", btnImport: "Imp", btnReset: "Reset", confirmReset: "Reset all?", addRow: "+ Row", copyAll: "Copy All", calcTitle: "Calculator", btnSave: "Save", btnEdit: "Edit", 
-                  proTitle: "Pro Feature 💎", proDesc: "Save Memory and Export/Import are available in the Pro version.", proBtn: "Upgrade to PRO" },
+                  proTitle: "Pro Feature 💎", proDesc: "Save Memory and Export/Import are available in the Pro version.", proBtn: "Upgrade to PRO",
+                  btnProLink: "🚀 Go to Pro Version", btnClose: "Close" },
             ja: { title: "Simple Sheet FREE", modeBase: "元の値から", descBase: "固定参照：すべての行が一番上の数値を参照します", modePrev: "フロー計算", descPrev: "上から順に計算。各行で 🏠 または 🔗 を選択可能。", masterLabelName: "計算名:", masterLabelStart: "元の数字", rowLabel: "項目名", copyMsg: "コピー完了", btnClear: "クリア", btnExport: "出力", btnImport: "読込", btnReset: "初期化", confirmReset: "全削除しますか？", addRow: "+ 行追加", copyAll: "全コピー", calcTitle: "電卓", btnSave: "記憶する", btnEdit: "編集", 
-                  proTitle: "Pro版の機能です 💎", proDesc: "データの保存機能や出力/読込はPro版のみの機能です。", proBtn: "Pro版を入手" },
+                  proTitle: "Pro版の機能です 💎", proDesc: "データの保存機能や出力/読込はPro版のみの機能です。", proBtn: "Pro版を入手",
+                  btnProLink: "🚀 Pro版へ", btnClose: "閉じる" },
             zh: { title: "Simple Sheet FREE", modeBase: "从初始值", descBase: "固定引用：每一行都引用顶部的初始值进行计算", modePrev: "流程模式", descPrev: "自上而下计算。每行可选 🏠 或 🔗 模式。", masterLabelName: "名称:", masterLabelStart: "初始值", rowLabel: "项目", copyMsg: "已复制", btnClear: "清除", btnExport: "导出", btnImport: "导入", btnReset: "重置", confirmReset: "确认重置所有数据？", addRow: "+ 添加行", copyAll: "复制全部", calcTitle: "计算器", btnSave: "保存", btnEdit: "编辑", 
-                  proTitle: "Pro版功能 💎", proDesc: "保存、导入/导出功能仅在Pro版中可用。", proBtn: "升级到Pro版" },
+                  proTitle: "Pro版功能 💎", proDesc: "保存、导入/导出功能仅在Pro版中可用。", proBtn: "升级到Pro版",
+                  btnProLink: "🚀 获取Pro版", btnClose: "关闭" },
             ko: { title: "Simple Sheet FREE", modeBase: "기준값에서", descBase: "고정 참조: 모든 행이 최상단의 기준값을 참조합니다", modePrev: "플로우 모드", descPrev: "순차 계산. 각 행에서 🏠 또는 🔗 선택 가능.", masterLabelName: "이름:", masterLabelStart: "기준값", rowLabel: "항목명", copyMsg: "복사됨", btnClear: "지우기", btnExport: "내보내기", btnImport: "가져오기", btnReset: "초기화", confirmReset: "전체 초기화하시겠습니까?", addRow: "+ 행 추가", copyAll: "전체 복사", calcTitle: "계산기", btnSave: "저장", btnEdit: "편집", 
-                  proTitle: "Pro 기능 💎", proDesc: "저장 및 내보내기/가져오기는 Pro 버전에서 사용할 수 있습니다.", proBtn: "Pro 버전 받기" },
+                  proTitle: "Pro 기능 💎", proDesc: "저장 및 내보내기/가져오기는 Pro 버전에서 사용할 수 있습니다.", proBtn: "Pro 버전 받기",
+                  btnProLink: "🚀 Pro 버전", btnClose: "닫기" },
             es: { title: "Simple Sheet FREE", modeBase: "Desde Base", descBase: "Referencia fija: cada fila usa el valor inicial superior", modePrev: "Flujo", descPrev: "Cálculo en cadena. Elige 🏠 o 🔗 por fila.", masterLabelName: "Nombre:", masterLabelStart: "Valor Base", rowLabel: "Etiqueta", copyMsg: "¡Copiado!", btnClear: "Borrar", btnExport: "Exportar", btnImport: "Importar", btnReset: "Reiniciar", confirmReset: "¿Reiniciar todo?", addRow: "+ Fila", copyAll: "Copiar todo", calcTitle: "Calculadora", btnSave: "Guardar", btnEdit: "Editar", 
-                  proTitle: "Función Pro 💎", proDesc: "Guardar y Exportar están disponibles en la versión Pro.", proBtn: "Obtener Pro" },
+                  proTitle: "Función Pro 💎", proDesc: "Guardar y Exportar están disponibles en la versión Pro.", proBtn: "Obtener Pro",
+                  btnProLink: "🚀 Obtener Pro", btnClose: "Cerrar" },
             fr: { title: "Simple Sheet FREE", modeBase: "Depuis Base", descBase: "Réf. fixe : chaque ligne utilise la valeur du haut", modePrev: "Flux", descPrev: "Calcul en chaîne. Choisissez 🏠 ou 🔗 par ligne.", masterLabelName: "Nom :", masterLabelStart: "Valeur de base", rowLabel: "Libellé", copyMsg: "Copié !", btnClear: "Effacer", btnExport: "Export", btnImport: "Import", btnReset: "RàZ", confirmReset: "Tout réinitialiser ?", addRow: "+ Ligne", copyAll: "Tout copier", calcTitle: "Calculatrice", btnSave: "Sauver", btnEdit: "Modifier", 
-                  proTitle: "Fonctionnalité Pro 💎", proDesc: "Sauvegarder et Exporter sont disponibles dans la version Pro.", proBtn: "Obtenir Pro" },
+                  proTitle: "Fonctionnalité Pro 💎", proDesc: "Sauvegarder et Exporter sont disponibles dans la version Pro.", proBtn: "Obtenir Pro",
+                  btnProLink: "🚀 Obtenir Pro", btnClose: "Fermer" },
             pt: { title: "Simple Sheet FREE", modeBase: "Da Base", descBase: "Ref. fixa: cada linha usa o valor inicial do topo", modePrev: "Fluxo", descPrev: "Cálculo em cadeia. Escolha 🏠 ou 🔗 por linha.", masterLabelName: "Nome:", masterLabelStart: "Valor Base", rowLabel: "Rótulo", copyMsg: "Copiado!", btnClear: "Limpar", btnExport: "Exportar", btnImport: "Importar", btnReset: "Reset", confirmReset: "Reiniciar tudo?", addRow: "+ Linha", copyAll: "Copiar tudo", calcTitle: "Calculadora", btnSave: "Salvar", btnEdit: "Editar", 
-                  proTitle: "Recurso Pro 💎", proDesc: "Salvar e Exportar estão disponíveis na versão Pro.", proBtn: "Obter Pro" },
+                  proTitle: "Recurso Pro 💎", proDesc: "Salvar e Exportar estão disponíveis na versão Pro.", proBtn: "Obter Pro",
+                  btnProLink: "🚀 Obter Pro", btnClose: "Fechar" },
             de: { title: "Simple Sheet FREE", modeBase: "Vom Basiswert", descBase: "Feste Referenz: Jede Zeile nutzt den oberen Basiswert", modePrev: "Flow", descPrev: "Kettenrechnung. Wählen Sie 🏠 oder 🔗 pro Zeile.", masterLabelName: "Name:", masterLabelStart: "Basiswert", rowLabel: "Label", copyMsg: "Kopiert!", btnClear: "Löschen", btnExport: "Export", btnImport: "Import", btnReset: "Reset", confirmReset: "Alles zurücksetzen?", addRow: "+ Zeile", copyAll: "Alles kopieren", calcTitle: "Rechner", btnSave: "Speichern", btnEdit: "Bearbeiten", 
-                  proTitle: "Pro-Funktion 💎", proDesc: "Speichern und Exportieren sind in der Pro-Version verfügbar.", proBtn: "Pro-Version holen" },
+                  proTitle: "Pro-Funktion 💎", proDesc: "Speichern und Exportieren sind in der Pro-Version verfügbar.", proBtn: "Pro-Version holen",
+                  btnProLink: "🚀 Pro holen", btnClose: "Schließen" },
             it: { title: "Simple Sheet FREE", modeBase: "Dalla Base", descBase: "Rif. fisso: ogni riga usa il valore iniziale in alto", modePrev: "Flusso", descPrev: "Calcolo a catena. Scegli 🏠 o 🔗 per riga.", masterLabelName: "Nome:", masterLabelStart: "Valore Base", rowLabel: "Etichetta", copyMsg: "Copiato!", btnClear: "Cancella", btnExport: "Esporta", btnImport: "Importa", btnReset: "Reset", confirmReset: "Ripristinare tutto?", addRow: "+ Riga", copyAll: "Copia tutto", calcTitle: "Calcolatrice", btnSave: "Salva", btnEdit: "Modifica", 
-                  proTitle: "Funzione Pro 💎", proDesc: "Salva e Esporta sono disponibili nella versione Pro.", proBtn: "Ottieni Pro" }
+                  proTitle: "Funzione Pro 💎", proDesc: "Salva e Esporta sono disponibili nella versione Pro.", proBtn: "Ottieni Pro",
+                  btnProLink: "🚀 Ottieni Pro", btnClose: "Chiudi" }
         };
 
         let currentLanguage = 'ja'; 
         let currentCalc = "0";
 
-        // --- 初期化 ---
         function init() {
             const langCont = document.getElementById('langContainer');
             Object.keys(languageMap).forEach(lang => {
@@ -293,7 +271,6 @@
             setLanguage(localStorage.getItem('simpleSheetLang_free') || 'ja'); 
         }
 
-        // --- 言語設定 ---
         function setLanguage(lang) {
             currentLanguage = lang; 
             localStorage.setItem('simpleSheetLang_free', lang);
@@ -319,9 +296,14 @@
             document.getElementById('btnSaveMemory').textContent = d.btnSave;
             document.getElementById('editToggle').textContent = d.btnEdit + ' ✎';
             
+            // モーダル関連
             document.getElementById('modalTitle').textContent = d.proTitle;
             document.getElementById('modalDesc').textContent = d.proDesc;
             document.getElementById('modalBtn').textContent = d.proBtn;
+            document.getElementById('btnClosePro').textContent = d.btnClose;
+
+            // PRO誘導ボタン
+            document.getElementById('btnLinkPro').textContent = d.btnProLink;
 
             document.querySelectorAll('.text-label-input').forEach(input => {
                 input.placeholder = d.rowLabel;
@@ -330,17 +312,13 @@
             updateDisplay();
         }
 
-        // --- Pro版誘導 ---
         function triggerProPromo() {
-            const modal = document.getElementById('proModal');
-            modal.classList.add('active');
+            document.getElementById('proModal').classList.add('active');
         }
         function closeProModal() {
-            const modal = document.getElementById('proModal');
-            modal.classList.remove('active');
+            document.getElementById('proModal').classList.remove('active');
         }
 
-        // --- 数値フォーマット ---
         function formatNum(num) {
             return num.toLocaleString(undefined, { 
                 minimumFractionDigits: 0, 
@@ -348,7 +326,6 @@
             });
         }
 
-        // --- 計算ロジック ---
         function updateDisplay() {
             const mVal = parseFloat(document.getElementById('masterInput').value) || 0;
             document.querySelectorAll('#rows-container-smart .row').forEach(r => {
@@ -400,7 +377,6 @@
             updateDisplay(); 
         }
 
-        // --- データ取得 ---
         function getScreenData() {
             return {
                 masterLabel: document.getElementById('masterLabel').value,
@@ -425,7 +401,6 @@
             };
         }
 
-        // --- データ適用 ---
         function applyData(s) {
             if(!s || !s.smartRows) { 
                 if(!document.querySelector('.row')) { addRowSmart(); addRowSimple(); }
@@ -448,7 +423,6 @@
             localStorage.setItem('simpleSheetSettings_free', JSON.stringify(getScreenData())); 
         }
 
-        // --- 行追加 ---
         function addRowSmart(s=null) {
             const id = s ? s.id : Math.random().toString(36).substr(2, 5);
             const ph = languageMap[currentLanguage].rowLabel;
@@ -456,8 +430,6 @@
             div.className = 'row'; 
             div.dataset.id = id;
             const val = s ? s.multiplier : '';
-            
-            // 修正: placeholder=""
             div.innerHTML = `
                 <input type="text" class="text-label-input" placeholder="${ph}" value="${s?s.label:''}" oninput="saveSettings()">
                 <div class="calc-area">
@@ -489,8 +461,6 @@
             div.dataset.id = id;
             const isChain = s ? s.baseMode==='chain' : true;
             const val = s ? s.multiplier : '';
-
-            // 修正: placeholder=""
             div.innerHTML = `
                 <input type="text" class="text-label-input" placeholder="${ph}" value="${s?s.label:''}" oninput="saveSettings()">
                 <div class="calc-area">
@@ -517,7 +487,6 @@
             updateDisplay();
         }
 
-        // --- ヘルパー関数 ---
         function changeOp(id, m, d) { 
             const ops = ['+','-','×','÷']; 
             const el = document.getElementById(m+'-op-'+id); 
@@ -540,7 +509,6 @@
             showMsg(languageMap[currentLanguage].copyMsg);
         }
 
-        // --- 電卓 ---
         function calcInput(v) { 
             if(currentCalc === "0" && v !== ".") currentCalc = v; 
             else currentCalc += v; 
@@ -594,9 +562,8 @@
 
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then(reg => console.log('SW registered!', reg))
-                    .catch(err => console.log('SW failed', err));
+                if(navigator.serviceWorker.controller) return;
+                navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW failed', err));
             });
         }
     </script>
